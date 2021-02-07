@@ -20,7 +20,8 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            echo $testvar
+            pwd
+            ls
             python3 -m venv venv
             . venv/bin/activate
             make install
@@ -60,7 +61,7 @@ jobs:
             dockerpath="gajdulj/flaskapp"
             # Authenticate & tag
             echo "Docker ID and Image: $dockerpath"
-            docker login --username gajdulj
+            docker login -u=gajdulj -p="$dockerhubpass"
             docker flaskapp:capstone gajdulj/flaskapp:capstone
             # Push image to a docker repository
             docker push gajdulj/flaskapp:capstone
