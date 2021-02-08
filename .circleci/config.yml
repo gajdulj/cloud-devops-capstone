@@ -69,7 +69,7 @@ jobs:
             sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
       - run:
-          name: run docker locally
+          name: Build docker image
           command: |
             . venv/bin/activate
             docker build -t flaskapp:capstone .
@@ -88,7 +88,7 @@ jobs:
             echo "1 complete"
             docker login -u "gajdulj" -p "$dockerhubpass"
             echo "2 complete"
-            docker flaskapp:capstone gajdulj/flaskapp:capstone
+            docker tag flaskapp:capstone gajdulj/flaskapp:capstone
             echo "3 complete"
             # Push image to a docker repository
             docker push gajdulj/flaskapp:capstone
