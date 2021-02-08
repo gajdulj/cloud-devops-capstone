@@ -77,8 +77,8 @@ jobs:
             # List docker images
             docker image ls
 
-            # Run flask app
-            docker run -p 8000:80 flaskapp:capstone
+            # Run flask app locally (switched off in CICD pipeline)
+            # docker run -p 8000:80 flaskapp:capstone
       - run:
           name: Upload docker image
           command: |
