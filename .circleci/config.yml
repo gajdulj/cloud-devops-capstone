@@ -52,7 +52,7 @@ jobs:
       # Install via apk on alpine based images
       - run:
           name: Install Docker client
-          command: apk add docker-cli
+          command: apt-get docker-cli
           
       - run:
           name: run docker locally
