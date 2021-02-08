@@ -7,7 +7,7 @@ jobs:
   build:
     working_directory: ~/repo
     docker:
-      - image: python:3.7.3-stretch
+      - image: python:3.7.9-alpine3.13
 
     steps:
       - checkout
@@ -49,10 +49,9 @@ jobs:
           version: 19.03.13
           docker_layer_caching: false
              
-      # Install via apk on alpine based images
       - run:
-          name: Install Docker client
-          command: apt-get docker-cli
+          name: Install Docker via apk
+          command: apk update && apk add --no-cache docker-cli
           
       - run:
           name: run docker locally
