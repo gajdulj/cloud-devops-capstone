@@ -59,7 +59,7 @@ jobs:
             # setup repository
             sudo apt-get update
             echo "1 complete"
-            sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+            sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
             echo "2 complete"
             curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
             echo "3 complete"
@@ -67,7 +67,7 @@ jobs:
             # install docker engine
             echo "starting 4"
             sudo apt-get update
-            sudo apt-get install docker-ce docker-ce-cli containerd.io
+            sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
       - run:
           name: run docker locally
