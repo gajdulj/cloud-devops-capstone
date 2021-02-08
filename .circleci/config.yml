@@ -58,14 +58,13 @@ jobs:
           command: |
             # setup repository
             sudo apt-get update
-            echo "1 complete"
+            
             sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
-            echo "2 complete"
+            
             curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
-            echo "3 complete"
+            
             sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" -y
             # install docker engine
-            echo "starting 4"
             sudo apt-get update
             sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
@@ -79,17 +78,21 @@ jobs:
             docker image ls
 
             # Run flask app
-            docker run -p 8000:80 flaskapp
+            docker run -p 8000:80 flaskapp:capstone
       - run:
           name: Upload docker image
           command: |
             dockerpath="gajdulj/flaskapp"
             # Authenticate & tag
             echo "Docker ID and Image: $dockerpath"
-            docker login -u=gajdulj -p="$dockerhubpass"
+            echo "1 complete"
+            docker login -u "gajdulj" -p "$dockerhubpass"
+            echo "2 complete"
             docker flaskapp:capstone gajdulj/flaskapp:capstone
+            echo "3 complete"
             # Push image to a docker repository
             docker push gajdulj/flaskapp:capstone
+            echo "end"
 workflows:
   default:
     jobs:
