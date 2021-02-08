@@ -58,10 +58,14 @@ jobs:
           command: |
             # setup repository
             sudo apt-get update
+            echo "1 complete"
             sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+            echo "2 complete"
             curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
-            sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+            echo "3 complete"
+            sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" -y
             # install docker engine
+            echo "starting 4"
             sudo apt-get update
             sudo apt-get install docker-ce docker-ce-cli containerd.io
 
