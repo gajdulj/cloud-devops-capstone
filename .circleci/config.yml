@@ -7,7 +7,7 @@ jobs:
   build:
     working_directory: ~/repo
     docker:
-      - image: python:3.7.3-stretch
+      - image: python:3.7.9-alpine3.13
 
     steps:
       - checkout
@@ -58,7 +58,7 @@ jobs:
           command: |
             sudo apt-get update
             sudo apt-get install docker-ce docker-ce-cli containerd.io
-          
+
       - run:
           name: run docker locally
           command: |
