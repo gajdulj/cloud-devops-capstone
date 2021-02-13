@@ -115,26 +115,27 @@ jobs:
       - run:
           name: Check if kubernetes cluster exists, if not, create it.
           command: |
-          CLUSTER_EXISTS=$(aws cloudformation list-exports --query \"Exports[?Name=='eksctl-flaskapp-cluster::ARN'].Value\" --output text)
+            CLUSTER_EXISTS=$(aws cloudformation list-exports --query \"Exports[?Name=='eksctl-flaskapp-cluster::ARN'].Value\" --output text)
 
-          if [ "${CLUSTER_EXISTS}" != "" ]
-            then 
-                echo "Cluster already exists. Proceeding to cluster update."
-            else
-                echo "Cluster not found, creating the cluster."
-                eksctl create cluster --name flaskapp \
-                      --version 1.17 \
-                      --nodegroup-name standard-workers \
-                      --node-type t2.medium \
-                      --nodes 2 \
-                      --nodes-min 1 \
-                      --nodes-max 2 \
-                      --node-ami auto \
-                      --region eu-west-1
-                sleep 2m
+            if [ "${CLUSTER_EXISTS}" != "" ]
+              then 
+                  echo "Cluster already exists. Proceeding to cluster update."
+              else
+                  echo "Cluster not found, creating the cluster."
+                  eksctl create cluster --name flaskapp \
+                        --version 1.17 \
+                        --nodegroup-name standard-workers \
+                        --node-type t2.medium \
+                        --nodes 2 \
+                        --nodes-min 1 \
+                        --nodes-max 2 \
+                        --node-ami auto \
+                        --region eu-west-1
+            fi
       - run:
           name: Update config for Kubernetes
           command: |
+            sleep 2m
             aws eks --region eu-west-1 update-kubeconfig --name flaskapp-capstone
       - run:
           name: Select kubernetes config created in the previous step
@@ -144,16 +145,16 @@ jobs:
       - run:
           name: Deploy kubernetes
           command: |
-          kubectl apply -f deploy_kubernetes.yml
-          kubectl rollout restart deployments/flaskapp
-          sleep 4m
+            kubectl apply -f deploy_kubernetes.yml
+            kubectl rollout restart deployments/flaskapp
+            sleep 4m
       - run:
           name: Print outputs
           command: |
-          kubectl get nodes
-          kubectl get deployments
-          kubectl get pod -o wide
-          kubectl get service/simple-web-app
+            kubectl get nodes
+            kubectl get deployments
+            kubectl get pod -o wide
+            kubectl get service/simple-web-app
 workflows:
   default:
     jobs:
