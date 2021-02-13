@@ -116,10 +116,10 @@ jobs:
           name: Check if kubernetes cluster exists, if not, create it.
           command: |
             export AWS_DEFAULT_REGION=eu-west-1
-            CLUSTER_EXISTS=$(aws cloudformation list-exports --query \"Exports[?Name=='eksctl-flaskapp-cluster::ARN'].Value\" --output text)
+            CLUSTER_EXISTS=$(aws cloudformation list-exports --query "Exports[?Name=='eksctl-flaskapp-cluster::ARN'].Value" --output text)
             echo ${CLUSTER_EXISTS}
-            
-            if [ "${CLUSTER_EXISTS}" != "" ]
+
+            if [ ! -z "${CLUSTER_EXISTS}" ]
               then 
                   echo "Cluster already exists. Proceeding to cluster update."
               else
@@ -142,7 +142,7 @@ jobs:
       - run:
           name: Select kubernetes config created in the previous step
           command: |
-            RESOURCE_NAME=$(aws cloudformation list-exports --query \"Exports[?Name=='eksctl-flaskapp-cluster::ARN'].Value\" --output text)
+            RESOURCE_NAME=$(aws cloudformation list-exports --query "Exports[?Name=='eksctl-flaskapp-cluster::ARN'].Value" --output text)
             kubectl config use-context ${RESOURCE_NAME}
       - run:
           name: Deploy kubernetes
