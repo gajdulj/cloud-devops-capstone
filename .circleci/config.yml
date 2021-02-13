@@ -112,16 +112,48 @@ jobs:
             curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
             sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
             kubectl version --client
-            
+      - run:
+          name: Check if kubernetes cluster exists, if not, create it.
+          command: |
+          CLUSTER_EXISTS=$(aws cloudformation list-exports --query \"Exports[?Name=='eksctl-flaskapp-cluster::ARN'].Value\" --output text)
+
+          if [ "${CLUSTER_EXISTS}" != "" ]
+            then 
+                echo "Cluster already exists. Proceeding to cluster update."
+            else
+                echo "Cluster not found, creating the cluster."
+                eksctl create cluster --name flaskapp \
+                      --version 1.17 \
+                      --nodegroup-name standard-workers \
+                      --node-type t2.medium \
+                      --nodes 2 \
+                      --nodes-min 1 \
+                      --nodes-max 2 \
+                      --node-ami auto \
+                      --region eu-west-1
+                sleep 2m
       - run:
           name: Update config for Kubernetes
           command: |
             aws eks --region eu-west-1 update-kubeconfig --name flaskapp-capstone
       - run:
-          name: Select kubrenetes config created in the previous step
+          name: Select kubernetes config created in the previous step
           command: |
-            kubectl config use-context arn:aws:eks:eu-west-1:110175802189:cluster/flaskapp-capstone
-
+            RESOURCE_NAME=$(aws cloudformation list-exports --query \"Exports[?Name=='eksctl-flaskapp-cluster::ARN'].Value\" --output text)
+            kubectl config use-context ${RESOURCE_NAME}
+      - run:
+          name: Deploy kubernetes
+          command: |
+          kubectl apply -f deploy_kubernetes.yml
+          kubectl rollout restart deployments/flaskapp
+          sleep 4m
+      - run:
+          name: Print outputs
+          command: |
+          kubectl get nodes
+          kubectl get deployments
+          kubectl get pod -o wide
+          kubectl get service/simple-web-app
 workflows:
   default:
     jobs:
