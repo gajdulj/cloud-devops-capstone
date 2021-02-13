@@ -93,7 +93,37 @@ jobs:
             # Push image to a docker repository
             docker push gajdulj/flaskapp:capstone
             echo "end"
+  kubernetes-deploy:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "da:95:0f:a4:4a:71:0e:d4:f4:33:89:5b:24:57:76:99"
+            # circelci fingerprint assigned to AWS pem key.
+
+      - run:
+          name: Install packages
+          command: |
+            apt-get update && apt-get -y install sudo curl
+            pip install awscli
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+            kubectl version --client
+            
+      - run:
+          name: Update config for Kubernetes
+          command: |
+            aws eks --region eu-west-1 update-kubeconfig --name flaskapp-capstone
+      - run:
+          name: Select kubrenetes config created in the previous step
+          command: |
+            kubectl config use-context arn:aws:eks:eu-west-1:110175802189:cluster/flaskapp-capstone
+
 workflows:
   default:
     jobs:
       - build
+      - kubernetes-deploy:
+          requires: [build]
