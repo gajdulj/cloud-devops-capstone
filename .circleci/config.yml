@@ -127,20 +127,15 @@ jobs:
               else
                   echo "Cluster not found, creating the cluster."
                   eksctl create cluster --name flaskapp \
-                        --version 1.17 \
-                        --nodegroup-name standard-workers \
                         --node-type t2.medium \
                         --nodes 2 \
-                        --nodes-min 1 \
-                        --nodes-max 2 \
-                        --node-ami auto \
                         --region eu-west-1
             fi
       - run:
           name: Update config for Kubernetes
           command: |
             sleep 2m
-            aws eks --region eu-west-1 update-kubeconfig --name flaskapp-capstone
+            aws eks --region eu-west-1 update-kubeconfig --name flaskapp
       - run:
           name: Select kubernetes config created in the previous step
           command: |
