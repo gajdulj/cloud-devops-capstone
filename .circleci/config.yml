@@ -115,8 +115,10 @@ jobs:
       - run:
           name: Check if kubernetes cluster exists, if not, create it.
           command: |
+            export AWS_DEFAULT_REGION=eu-west-1
             CLUSTER_EXISTS=$(aws cloudformation list-exports --query \"Exports[?Name=='eksctl-flaskapp-cluster::ARN'].Value\" --output text)
-
+            echo ${CLUSTER_EXISTS}
+            
             if [ "${CLUSTER_EXISTS}" != "" ]
               then 
                   echo "Cluster already exists. Proceeding to cluster update."
