@@ -139,6 +139,7 @@ jobs:
       - run:
           name: Select kubernetes config created in the previous step
           command: |
+            export AWS_DEFAULT_REGION=eu-west-1
             RESOURCE_NAME=$(aws cloudformation list-exports --query "Exports[?Name=='eksctl-flaskapp-cluster::ARN'].Value" --output text)
             kubectl config use-context ${RESOURCE_NAME}
       - run:
