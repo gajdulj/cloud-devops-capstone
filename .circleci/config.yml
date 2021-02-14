@@ -154,7 +154,7 @@ jobs:
             kubectl get nodes
             kubectl get deployments
             kubectl get pod -o wide
-            kubectl get service/simple-web-app
+            kubectl get service/flaskapp
 workflows:
   default:
     jobs:
