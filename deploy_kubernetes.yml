@@ -2,15 +2,16 @@ apiVersion: v1
 kind: Service
 metadata:
   name: flaskapp
-
+  labels:
+    name: flaskapp
 spec:
   selector:
     app: flaskapp
-  ports:
-    - port: 8080
-      targetPort: 80
   type: LoadBalancer
-
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
 ---
 
 apiVersion: apps/v1
@@ -19,10 +20,15 @@ metadata:
   name: flaskapp
 
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: flaskapp
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
   template:
     metadata:
       labels:
