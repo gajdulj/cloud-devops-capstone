@@ -155,6 +155,7 @@ jobs:
             kubectl get deployments
             kubectl get pod -o wide
             kubectl get service/flaskapp
+            kubectl describe pods
 workflows:
   default:
     jobs:
