@@ -37,7 +37,8 @@ spec:
     spec:
       containers:
         - name: flaskapp
-          image: gajdulj/flaskapp
+          image: gajdulj/flaskapp:capstone
           imagePullPolicy: "Always"
           ports:
             - containerPort: 80
+              name: http-server
