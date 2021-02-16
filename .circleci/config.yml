@@ -58,11 +58,8 @@ jobs:
           command: |
             # setup repository
             sudo apt-get update
-            
             sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
-            
             curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
-            
             sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" -y
             # install docker engine
             sudo apt-get update
@@ -73,10 +70,8 @@ jobs:
           command: |
             . venv/bin/activate
             docker build -t flaskapp:capstone .
-
             # List docker images
             docker image ls
-
             # Run flask app locally (switched off in CICD pipeline)
             # docker run -p 8000:80 flaskapp:capstone
       - run:
@@ -131,7 +126,6 @@ jobs:
                         --nodes 2 \
                         --region eu-west-1
             fi
-            sleep 3m
       - run:
           name: Update config for Kubernetes
           command: |
@@ -147,7 +141,6 @@ jobs:
           command: |
             kubectl apply -f deploy_kubernetes.yml
             kubectl rollout restart deployments/flaskapp
-            sleep 5m
       - run:
           name: Print outputs
           command: |

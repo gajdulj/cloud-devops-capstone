@@ -19,7 +19,7 @@ def home():
     <ul>
     <br /> 
     Source code: <br />
-    <a href="https://github.com/gajdulj/ml-microservice-kubernetes">Cloud DevOps Enigneer capstone</a>
+    <a href="https://github.com/gajdulj/cloud-devops-capstone">Cloud DevOps Enigneer capstone</a>
     </p>
     Jakub Gajdul, 2021
     """
