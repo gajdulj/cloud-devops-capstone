@@ -2,11 +2,13 @@
 
 ## Project Overview
 
+* This project demonstrates automatic update capabilities of CICD pipeline.
+* Every change of the main branch of the github repository will triger the update of this application.
+* The infrastructure as code starts a Kubernetes cluster on AWS that the app is running in.
+* Code linting and automated tests are performed before any update takes place.
+* Deployment method used: rolling
 
-### Project Tasks
-
-
----
+## Testing locally before circleci pipeline gets used:
 
 ## Setup the Environment
 

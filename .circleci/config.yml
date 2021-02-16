@@ -131,10 +131,10 @@ jobs:
                         --nodes 2 \
                         --region eu-west-1
             fi
+            sleep 3m
       - run:
           name: Update config for Kubernetes
           command: |
-            sleep 2m
             aws eks --region eu-west-1 update-kubeconfig --name flaskapp
       - run:
           name: Select kubernetes config created in the previous step
@@ -147,7 +147,7 @@ jobs:
           command: |
             kubectl apply -f deploy_kubernetes.yml
             kubectl rollout restart deployments/flaskapp
-            sleep 4m
+            sleep 5m
       - run:
           name: Print outputs
           command: |
